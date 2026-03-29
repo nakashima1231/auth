@@ -408,15 +408,16 @@
   if (!token) window.location.href = 'index.html';
 
   // Preenche UI com dados do usuário
-  const name  = localStorage.getItem('name') || '?';
+  const name     = localStorage.getItem('name') || '?';
+  const username = localStorage.getItem('username') || '';
   const email = localStorage.getItem('email') || '';
   const ini   = name[0].toUpperCase();
 
   document.getElementById('navInitial').textContent    = ini;
-  document.getElementById('navName').textContent       = name;
+  document.getElementById('navName').textContent        = username ? '@' + username : name;
   document.getElementById('profileInitial').textContent = ini;
-  document.getElementById('profileName').textContent   = name;
-  document.getElementById('profileEmail').textContent  = email;
+  document.getElementById('profileName').textContent    = name;
+  document.getElementById('profileEmail').textContent   = username ? '@' + username : email;
 
   if (role === 'admin') document.getElementById('adminLink').style.display = 'block';
   document.getElementById('composeBox').style.display = 'block';
@@ -463,7 +464,7 @@
           <div class="post-meta">
             <div class="post-avatar ${avCls}">${initials}</div>
             <div>
-              <div class="post-author">${p.user_email.split('@')[0]}</div>
+              <div class="post-author">${p.username ? '@' + p.username : p.user_email.split('@')[0]}</div>
               <div class="post-email">${p.user_email}</div>
             </div>
             <div class="post-time">${timeAgo(p.created_at)}</div>
