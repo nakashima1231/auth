@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<title>Painel Admin</title>
+
+<style>
+/* Reset e base */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: #f4f4f4;
+    padding: 40px;
+    color: #333;
+}
+
+h2 {
+    text-align: center;
+    margin-bottom: 30px;
+    color: #004D61;
+}
+
+/* Container da tabela */
+.table-container {
+    max-width: 800px;
+    margin: 0 auto;
+    background: #fff;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+/* Tabela */
+table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+th, td {
+    padding: 15px 20px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+th {
+    background: #004D61;
+    color: #fff;
+    font-weight: 500;
+}
+
+/* Linhas alternadas */
+tbody tr:nth-child(even) {
+    background: #f9f9f9;
+}
+
+tbody tr:hover {
+    background: #e6f7ff;
+}
+
+/* Botões */
+button {
+    padding: 6px 12px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.2s ease;
+}
+
+/* Botão excluir */
+button.excluir {
+    background: #c0392b;
+    color: #fff;
+}
+
+button.excluir:hover {
+    background: #e74c3c;
+}
+
+/* Botão promover */
+button.promover {
+    background: #27ae60;
+    color: #fff;
+    margin-left: 5px;
+}
+
+button.promover:hover {
+    background: #2ecc71;
+}
+</style>
+</head>
+
+<body>
+
+<h2>Usuários cadastrados</h2>
+
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>Nome</th>
+<th>Email</th>
+<th>Ações</th>
+</tr>
+</thead>
+
+<tbody id="userTable"></tbody>
+</table>
+</div>
+
+<script>
+const token = localStorage.getItem("token");
+const role = localStorage.getItem("role");
+
+if(!token || role !== "admin"){
+    window.location.href = "index.html";
+}
+
+function carregarUsuarios(){
+    fetch("/users",{
+        headers:{
+            "Authorization":"Bearer "+token
+        }
+    })
+    .then(res=>res.json())
+    .then(users=>{
+        const table = document.getElementById("userTable");
+        table.innerHTML = "";
+
+        users.forEach(user=>{
+            const row = document.createElement("tr");
+            row.innerHTML = `
+                <td>${user.id}</td>
+                <td>${user.name}</td>
+                <td>${user.email}</td>
+                <td>
+                    <button class="excluir" onclick="deletar(${user.id})">Excluir</button>
+                    <button class="promover" onclick="promover(${user.id})">Promover</button>
+                    <button class="promover" onclick="revogar(${user.id})">Revogar</button>
+                </td>
+            `;
+            table.appendChild(row);
+        });
+    });
+}
+
+function deletar(id){
+    if(!confirm("Deseja deletar este usuário?")) return;
+
+    fetch("/users/"+id,{
+        method:"DELETE",
+        headers:{
+            "Authorization":"Bearer "+token
+        }
+    })
+    .then(res=>res.json())
+    .then(data=>{
+        alert(data.message);
+        carregarUsuarios();
+    })
+    .catch(err=>console.log(err));
+}
+
+function promover(id){
+    if(!confirm("Promover este usuário para admin?")) return;
+
+    fetch(`/admin/${id}/promote`,{
+        method:"PATCH",
+        headers:{
+            "Content-Type":"application/json",
+            "Authorization":"Bearer "+token
+        }
+    })
+    .then(res=>res.json())
+    .then(data=>{
+        alert(data.message);
+        carregarUsuarios();
+    })
+    .catch(err=>console.log(err));
+}
+
+function revogar(id){
+    if(!confirm("revogar este usuário para usuario padrao?")) return;
+
+    fetch(`/admin/${id}/revoke`,{
+    method:"PATCH",
+    headers:{
+        "Content-Type":"application/json",
+        "Authorization":"Bearer "+token
+    }
+    })
+    .then(res => {
+        if (!res.ok) {
+            return res.json().then(err => { throw err });
+        }
+        return res.json();
+    })
+    .then(data => {
+        alert(data.message);
+        carregarUsuarios();
+    })
+    .catch(err => {
+        alert(err.message || "Erro ao revogar");
+    });
+}
+
+carregarUsuarios();
+</script>
+
+</body>
+</html>

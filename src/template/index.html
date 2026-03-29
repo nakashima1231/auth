@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<title>Login / Criar Conta</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    background: linear-gradient(135deg, #004D61, #007a9c);
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.container {
+    background: white;
+    width: 350px;
+    border-radius: 10px;
+    padding: 25px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.2);
+}
+
+h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #004D61;
+}
+
+input {
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+}
+
+button {
+    width: 100%;
+    padding: 10px;
+    margin-top: 15px;
+    border: none;
+    border-radius: 6px;
+    background: #004D61;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #006b85;
+}
+
+.switch {
+    text-align: center;
+    margin-top: 15px;
+    font-size: 14px;
+}
+
+.switch a {
+    color: #004D61;
+    cursor: pointer;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.form {
+    display: none;
+}
+
+.form.active {
+    display: block;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- LOGIN -->
+    <div class="form active" id="loginForm">
+        <h2>Login</h2>
+
+        <input type="email" id="loginEmail" placeholder="Email">
+        <input type="password" id="loginPassword" placeholder="Senha">
+
+        <button onclick="login()">Entrar</button>
+
+        <div class="switch">
+            Não tem conta? <a onclick="trocar()">Criar conta</a>
+        </div>
+    </div>
+
+    <!-- CADASTRO -->
+    <div class="form" id="registerForm">
+        <h2>Criar Conta</h2>
+
+        <input type="text" id="regName" placeholder="Nome">
+        <input type="email" id="regEmail" placeholder="Email">
+        <input type="password" id="regPassword" placeholder="Senha">
+
+        <button onclick="register()">Cadastrar</button>
+
+        <div class="switch">
+            Já tem conta? <a onclick="trocar()">Entrar</a>
+        </div>
+    </div>
+
+</div>
+
+<script>
+
+function trocar() {
+    document.getElementById("loginForm").classList.toggle("active");
+    document.getElementById("registerForm").classList.toggle("active");
+}
+
+function login() {
+    const email = document.getElementById("loginEmail").value;
+    const password = document.getElementById("loginPassword").value;
+
+    if(!email.includes("@")) {
+        alert("Email inválido!");
+        return;
+    }
+
+    fetch("/login", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({ email, password })
+    })
+    .then(res => { 
+        return res.json().then(data => {
+            return { status: res.status, body: data };
+        });
+    })
+    .then(result => {
+    if(result.status === 200 || result.status === 201) {
+
+        localStorage.setItem("name", result.body.name);
+        localStorage.setItem("email", result.body.email);
+        localStorage.setItem("token", result.body.token);
+        localStorage.setItem("role", result.body.role);
+
+        if(result.body.role == "admin") {
+            window.location.href = ("admin.html");
+        } else {
+            window.location.href = "dashboard.html";
+        }
+    } else {
+        alert(result.body.message);
+    }
+    })
+    .catch(err => console.log(err));
+}
+
+function register() {
+    const name = document.getElementById("regName").value;
+    const email = document.getElementById("regEmail").value;
+    const password = document.getElementById("regPassword").value;
+
+    if(!email.includes("@")) {
+        alert("Email inválido!");
+        return;
+    }
+
+    if(password.length < 6) {
+        alert("Senha muito curta!");
+        return;
+    }
+
+    fetch("/register", {
+        method: "POST",
+        headers: {"Content-type": "application/json"},
+        body: JSON.stringify({ name, email, password })
+    })
+    .then(res => res.json())
+    .then(data => {
+        alert(data.message);
+    })
+    .catch(err => console.log(err));
+}
+
+</script>
+
+</body>
+</html>
