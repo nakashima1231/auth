@@ -269,7 +269,7 @@
           <div class="user-cell">
             <div class="user-avatar ${avCls}">${ini}</div>
             <div>
-              <div class="user-name">${u.name || '—'} ${isMe ? '<span style="color:var(--muted);font-size:11px">(você)</span>' : ''}</div>
+              <div class="user-name">${u.name || '—'} ${isMe ? '<span style="color:var(--muted);font-size:11px">(você)</span>' : ''}</div><div style="font-size:12px;color:var(--accent);margin-top:2px">${u.username ? '@' + u.username : ''}</div>
               <div class="user-email">${u.email}</div>
             </div>
           </div>
