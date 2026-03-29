@@ -10,14 +10,14 @@
   *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
   :root {
-    --bg:       #0d0d0f;
-    --surface:  #141416;
-    --border:   #222226;
-    --accent:   #e8622a;
-    --accent2:  #f0944d;
-    --text:     #f0ede8;
-    --muted:    #6b6b72;
-    --radius:   14px;
+    --bg:      #0d0d0f;
+    --surface: #141416;
+    --border:  #222226;
+    --accent:  #e8622a;
+    --accent2: #f0944d;
+    --text:    #f0ede8;
+    --muted:   #6b6b72;
+    --radius:  14px;
   }
 
   body {
@@ -29,7 +29,6 @@
     grid-template-columns: 1fr 1fr;
   }
 
-  /* LADO ESQUERDO — VISUAL */
   .left {
     position: relative;
     display: flex;
@@ -59,20 +58,10 @@
     pointer-events: none;
   }
 
-  .brand {
-    font-family: 'Syne', sans-serif;
-    font-size: 28px;
-    font-weight: 800;
-    letter-spacing: -0.5px;
-    color: var(--text);
-  }
-
+  .brand { font-family: 'Syne', sans-serif; font-size: 28px; font-weight: 800; letter-spacing: -0.5px; }
   .brand span { color: var(--accent); }
 
-  .left-content {
-    position: relative;
-    z-index: 1;
-  }
+  .left-content { position: relative; z-index: 1; }
 
   .left-content h1 {
     font-family: 'Syne', sans-serif;
@@ -83,66 +72,36 @@
     margin-bottom: 20px;
   }
 
-  .left-content h1 em {
-    font-style: normal;
-    color: var(--accent);
-  }
+  .left-content h1 em { font-style: normal; color: var(--accent); }
+  .left-content p { color: var(--muted); font-size: 16px; line-height: 1.7; max-width: 340px; }
 
-  .left-content p {
-    color: var(--muted);
-    font-size: 16px;
-    line-height: 1.7;
-    max-width: 340px;
-  }
-
-  .mockup-posts {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    margin-top: 48px;
-    opacity: 0.55;
-  }
+  .mockup-posts { display: flex; flex-direction: column; gap: 12px; margin-top: 48px; opacity: 0.55; }
 
   .mock-card {
     background: var(--surface);
     border: 1px solid var(--border);
     border-radius: var(--radius);
     padding: 16px 20px;
-    display: flex;
-    gap: 14px;
-    align-items: flex-start;
+    display: flex; gap: 14px; align-items: flex-start;
   }
 
-  .mock-avatar {
-    width: 36px; height: 36px;
-    border-radius: 50%;
-    flex-shrink: 0;
-  }
-
+  .mock-avatar { width: 36px; height: 36px; border-radius: 50%; flex-shrink: 0; }
   .mock-avatar.a1 { background: linear-gradient(135deg, #e8622a, #f0944d); }
   .mock-avatar.a2 { background: linear-gradient(135deg, #5b6af0, #9b5bdb); }
   .mock-avatar.a3 { background: linear-gradient(135deg, #2ab4e8, #2ae8c3); }
 
   .mock-lines { flex: 1; }
-  .mock-line  { height: 9px; background: var(--border); border-radius: 4px; margin-bottom: 8px; }
+  .mock-line { height: 9px; background: var(--border); border-radius: 4px; margin-bottom: 8px; }
   .mock-line.short { width: 60%; }
   .mock-line.xshort { width: 35%; height: 7px; background: #1c1c20; }
 
   .left-footer { color: var(--muted); font-size: 13px; }
 
-  /* LADO DIREITO — FORM */
-  .right {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 48px 64px;
-  }
-
+  .right { display: flex; align-items: center; justify-content: center; padding: 48px 64px; }
   .form-box { width: 100%; max-width: 380px; }
 
   .form-tabs {
     display: flex;
-    gap: 0;
     background: var(--surface);
     border: 1px solid var(--border);
     border-radius: 10px;
@@ -151,53 +110,38 @@
   }
 
   .tab-btn {
-    flex: 1;
-    padding: 10px;
-    border: none;
-    background: transparent;
-    color: var(--muted);
-    font-family: 'DM Sans', sans-serif;
-    font-size: 14px;
-    font-weight: 500;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: all 0.2s;
+    flex: 1; padding: 10px; border: none;
+    background: transparent; color: var(--muted);
+    font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 500;
+    border-radius: 8px; cursor: pointer; transition: all 0.2s;
   }
-
-  .tab-btn.active {
-    background: var(--accent);
-    color: #fff;
-  }
+  .tab-btn.active { background: var(--accent); color: #fff; }
 
   .form-section { display: none; }
   .form-section.active { display: block; }
 
   .form-section h2 {
     font-family: 'Syne', sans-serif;
-    font-size: 24px;
-    font-weight: 700;
-    margin-bottom: 6px;
-    letter-spacing: -0.5px;
+    font-size: 24px; font-weight: 700;
+    margin-bottom: 6px; letter-spacing: -0.5px;
   }
+  .form-section p { color: var(--muted); font-size: 14px; margin-bottom: 28px; }
 
-  .form-section p {
-    color: var(--muted);
-    font-size: 14px;
-    margin-bottom: 28px;
-  }
-
-  .field {
-    margin-bottom: 16px;
-  }
+  .field { margin-bottom: 16px; }
 
   .field label {
-    display: block;
-    font-size: 12px;
-    font-weight: 500;
-    text-transform: uppercase;
-    letter-spacing: 0.8px;
-    color: var(--muted);
-    margin-bottom: 8px;
+    display: block; font-size: 12px; font-weight: 500;
+    text-transform: uppercase; letter-spacing: 0.8px;
+    color: var(--muted); margin-bottom: 8px;
+  }
+
+  .input-wrapper { position: relative; }
+
+  .input-prefix {
+    position: absolute; left: 14px; top: 50%;
+    transform: translateY(-50%);
+    color: var(--muted); font-size: 15px;
+    pointer-events: none;
   }
 
   .field input {
@@ -208,41 +152,27 @@
     padding: 13px 16px;
     color: var(--text);
     font-family: 'DM Sans', sans-serif;
-    font-size: 15px;
-    outline: none;
+    font-size: 15px; outline: none;
     transition: border-color 0.2s;
   }
 
+  .field input.has-prefix { padding-left: 30px; }
   .field input:focus { border-color: var(--accent); }
   .field input::placeholder { color: var(--muted); }
 
   .btn-primary {
-    width: 100%;
-    background: var(--accent);
-    color: #fff;
-    border: none;
-    border-radius: 10px;
-    padding: 14px;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 15px;
-    font-weight: 500;
-    cursor: pointer;
-    margin-top: 8px;
-    transition: background 0.2s, transform 0.1s;
+    width: 100%; background: var(--accent); color: #fff; border: none;
+    border-radius: 10px; padding: 14px;
+    font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 500;
+    cursor: pointer; margin-top: 8px; transition: background 0.2s, transform 0.1s;
   }
-
   .btn-primary:hover { background: var(--accent2); }
   .btn-primary:active { transform: scale(0.98); }
 
   .error-msg {
-    color: #e85555;
-    font-size: 13px;
-    margin-top: 12px;
-    display: none;
-    padding: 10px 14px;
-    background: rgba(232,85,85,0.1);
-    border-radius: 8px;
-    border: 1px solid rgba(232,85,85,0.2);
+    color: #e85555; font-size: 13px; margin-top: 12px; display: none;
+    padding: 10px 14px; background: rgba(232,85,85,0.1);
+    border-radius: 8px; border: 1px solid rgba(232,85,85,0.2);
   }
 
   @media (max-width: 768px) {
@@ -254,14 +184,11 @@
 </head>
 <body>
 
-<!-- LADO ESQUERDO -->
 <div class="left">
   <div class="brand">Nexus<span>.</span></div>
-
   <div class="left-content">
     <h1>Compartilhe<br>suas <em>ideias</em><br>com o mundo.</h1>
     <p>Uma rede social simples, rápida e segura. Escreva, publique e conecte-se.</p>
-
     <div class="mockup-posts">
       <div class="mock-card">
         <div class="mock-avatar a1"></div>
@@ -290,11 +217,9 @@
       </div>
     </div>
   </div>
-
   <div class="left-footer">© 2025 Nexus — Gabriel Nakashima</div>
 </div>
 
-<!-- LADO DIREITO -->
 <div class="right">
   <div class="form-box">
 
@@ -306,11 +231,11 @@
     <!-- LOGIN -->
     <div class="form-section active" id="tab-login">
       <h2>Bem-vindo de volta</h2>
-      <p>Entre com sua conta para continuar.</p>
+      <p>Entre com seu email ou @username.</p>
 
       <div class="field">
-        <label>Email</label>
-        <input type="email" id="loginEmail" placeholder="seu@email.com">
+        <label>Email ou username</label>
+        <input type="text" id="loginIdentifier" placeholder="seu@email.com ou @seunome">
       </div>
       <div class="field">
         <label>Senha</label>
@@ -326,8 +251,15 @@
       <p>Preencha os dados para começar.</p>
 
       <div class="field">
-        <label>Nome</label>
+        <label>Nome completo</label>
         <input type="text" id="regName" placeholder="Seu nome">
+      </div>
+      <div class="field">
+        <label>Username</label>
+        <div class="input-wrapper">
+          <span class="input-prefix">@</span>
+          <input type="text" id="regUsername" class="has-prefix" placeholder="seunome" oninput="sanitizeUsername(this)">
+        </div>
       </div>
       <div class="field">
         <label>Email</label>
@@ -359,28 +291,37 @@
     el.style.display = 'block';
   }
 
+  // Remove caracteres inválidos do username em tempo real
+  function sanitizeUsername(input) {
+    input.value = input.value.replace(/[^a-zA-Z0-9_]/g, '').toLowerCase();
+  }
+
   async function login() {
-    const email    = document.getElementById('loginEmail').value;
+    let identifier = document.getElementById('loginIdentifier').value.trim();
     const password = document.getElementById('loginPassword').value;
     document.getElementById('loginError').style.display = 'none';
+
+    // remove @ se o usuário digitou @gabriel
+    if (identifier.startsWith('@')) identifier = identifier.slice(1);
 
     try {
       const res  = await fetch('/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password })
+        body: JSON.stringify({ identifier, password })
       });
       const data = await res.json();
 
       if (res.ok) {
-        localStorage.setItem('token', data.token);
-        localStorage.setItem('name',  data.name);
-        localStorage.setItem('email', data.email);
-        localStorage.setItem('role',  data.role);
-        localStorage.setItem('id',    data.id);
+        localStorage.setItem('token',    data.token);
+        localStorage.setItem('name',     data.name);
+        localStorage.setItem('username', data.username);
+        localStorage.setItem('email',    data.email);
+        localStorage.setItem('role',     data.role);
+        localStorage.setItem('id',       data.id);
         window.location.href = data.role === 'admin' ? 'admin.html' : 'feed.html';
       } else {
-        showError('loginError', data.message || 'Erro ao fazer login');
+        showError('loginError', data.message || 'Credenciais incorretas');
       }
     } catch (e) {
       showError('loginError', 'Erro de conexão. Tente novamente.');
@@ -388,24 +329,26 @@
   }
 
   async function register() {
-    const name     = document.getElementById('regName').value;
-    const email    = document.getElementById('regEmail').value;
+    const name     = document.getElementById('regName').value.trim();
+    const username = document.getElementById('regUsername').value.trim();
+    const email    = document.getElementById('regEmail').value.trim();
     const password = document.getElementById('regPassword').value;
     document.getElementById('registerError').style.display = 'none';
 
+    if (!username || username.length < 3) return showError('registerError', 'Username deve ter pelo menos 3 caracteres');
     if (password.length < 6) return showError('registerError', 'Senha muito curta (mínimo 6 caracteres)');
 
     try {
       const res  = await fetch('/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, email, password })
+        body: JSON.stringify({ name, username, email, password })
       });
       const data = await res.json();
 
       if (res.ok) {
         switchTab('login');
-        document.getElementById('loginEmail').value = email;
+        document.getElementById('loginIdentifier').value = username;
       } else {
         showError('registerError', data.message || 'Erro ao criar conta');
       }
@@ -414,7 +357,6 @@
     }
   }
 
-  // redireciona se já logado
   if (localStorage.getItem('token')) {
     window.location.href = localStorage.getItem('role') === 'admin' ? 'admin.html' : 'feed.html';
   }
