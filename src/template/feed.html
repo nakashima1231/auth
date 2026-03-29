@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nexus — Feed</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg:      #0d0d0f;
+    --surface: #141416;
+    --border:  #222226;
+    --accent:  #e8622a;
+    --accent2: #f0944d;
+    --text:    #f0ede8;
+    --muted:   #6b6b72;
+    --radius:  14px;
+  }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+  }
+
+  /* NAVBAR */
+  nav {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(13,13,15,0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 32px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .brand {
+    font-family: 'Syne', sans-serif;
+    font-size: 22px;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+  }
+  .brand span { color: var(--accent); }
+
+  .nav-right { display: flex; align-items: center; gap: 16px; }
+
+  .nav-user {
+    display: flex; align-items: center; gap: 10px;
+    font-size: 14px; color: var(--muted);
+  }
+
+  .nav-avatar {
+    width: 32px; height: 32px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Syne', sans-serif;
+    font-size: 13px; font-weight: 700; color: #fff;
+    flex-shrink: 0;
+  }
+
+  .btn-logout {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    padding: 6px 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .btn-logout:hover { border-color: var(--accent); color: var(--accent); }
+
+  /* LAYOUT */
+  .layout {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 40px 24px;
+    display: grid;
+    grid-template-columns: 1fr 320px;
+    gap: 32px;
+    align-items: start;
+  }
+
+  /* SIDEBAR */
+  .sidebar { position: sticky; top: 80px; }
+
+  .sidebar-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 24px;
+    margin-bottom: 16px;
+  }
+
+  .sidebar-card h3 {
+    font-family: 'Syne', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    margin-bottom: 16px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+  }
+
+  .profile-info { display: flex; align-items: center; gap: 14px; margin-bottom: 16px; }
+
+  .profile-avatar {
+    width: 48px; height: 48px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Syne', sans-serif; font-size: 20px; font-weight: 700; color: #fff;
+  }
+
+  .profile-name { font-family: 'Syne', sans-serif; font-size: 16px; font-weight: 700; }
+  .profile-email { font-size: 13px; color: var(--muted); margin-top: 2px; }
+
+  /* COMPOSE */
+  .compose { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; margin-bottom: 24px; }
+
+  .compose-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 13px; font-weight: 600;
+    text-transform: uppercase; letter-spacing: 0.8px;
+    color: var(--muted); margin-bottom: 14px;
+  }
+
+  .compose input, .compose textarea {
+    width: 100%;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 12px 16px;
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.2s;
+    display: block;
+    margin-bottom: 10px;
+    resize: none;
+  }
+
+  .compose textarea { min-height: 90px; line-height: 1.6; }
+  .compose input:focus, .compose textarea:focus { border-color: var(--accent); }
+  .compose input::placeholder, .compose textarea::placeholder { color: var(--muted); }
+
+  .btn-post {
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    padding: 11px 20px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px; font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.1s;
+    float: right;
+  }
+  .btn-post:hover { background: var(--accent2); }
+  .btn-post:active { transform: scale(0.97); }
+
+  /* FEED */
+  .feed-header {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 20px;
+  }
+
+  .feed-header h2 {
+    font-family: 'Syne', sans-serif;
+    font-size: 22px; font-weight: 800; letter-spacing: -0.5px;
+  }
+
+  .post-count { font-size: 13px; color: var(--muted); }
+
+  /* POST CARD */
+  .post-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 22px 24px;
+    margin-bottom: 14px;
+    transition: border-color 0.2s;
+    animation: fadeUp 0.3s ease both;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .post-card:hover { border-color: #333; }
+
+  .post-meta {
+    display: flex; align-items: center; gap: 10px;
+    margin-bottom: 14px;
+  }
+
+  .post-avatar {
+    width: 36px; height: 36px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 700; color: #fff;
+    flex-shrink: 0;
+  }
+
+  .post-author { font-weight: 500; font-size: 14px; }
+  .post-email  { font-size: 12px; color: var(--muted); margin-top: 1px; }
+  .post-time   { margin-left: auto; font-size: 12px; color: var(--muted); }
+
+  .post-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 18px; font-weight: 700;
+    letter-spacing: -0.3px;
+    margin-bottom: 8px;
+    line-height: 1.3;
+  }
+
+  .post-content {
+    font-size: 14px; line-height: 1.75;
+    color: #b8b5b0;
+  }
+
+  .post-actions {
+    display: flex; align-items: center; gap: 10px;
+    margin-top: 16px; padding-top: 14px;
+    border-top: 1px solid var(--border);
+  }
+
+  .btn-action {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12px; padding: 5px 12px;
+    border-radius: 6px; cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .btn-action:hover  { border-color: var(--accent); color: var(--accent); }
+  .btn-delete:hover  { border-color: #e85555; color: #e85555; }
+
+  .empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--muted);
+  }
+
+  .empty-state h3 {
+    font-family: 'Syne', sans-serif;
+    font-size: 20px; font-weight: 700; margin-bottom: 8px; color: var(--text);
+  }
+
+  /* MODAL EDITAR */
+  .modal-overlay {
+    display: none;
+    position: fixed; inset: 0; z-index: 200;
+    background: rgba(0,0,0,0.75);
+    align-items: center; justify-content: center;
+  }
+  .modal-overlay.open { display: flex; }
+
+  .modal {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 28px;
+    width: 90%; max-width: 480px;
+  }
+
+  .modal h3 {
+    font-family: 'Syne', sans-serif;
+    font-size: 18px; font-weight: 700; margin-bottom: 20px;
+  }
+
+  .modal input, .modal textarea {
+    width: 100%;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 12px 16px;
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px; outline: none;
+    display: block; margin-bottom: 12px; resize: none;
+  }
+  .modal textarea { min-height: 110px; line-height: 1.6; }
+  .modal input:focus, .modal textarea:focus { border-color: var(--accent); }
+
+  .modal-actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 4px; }
+
+  .btn-cancel {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px; padding: 10px 18px;
+    border-radius: 8px; cursor: pointer;
+  }
+
+  .btn-save {
+    background: var(--accent);
+    color: #fff; border: none;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px; font-weight: 500; padding: 10px 20px;
+    border-radius: 8px; cursor: pointer;
+    transition: background 0.2s;
+  }
+  .btn-save:hover { background: var(--accent2); }
+
+  /* cores de avatar por hash */
+  .av0 { background: linear-gradient(135deg,#e8622a,#f0944d); }
+  .av1 { background: linear-gradient(135deg,#5b6af0,#9b5bdb); }
+  .av2 { background: linear-gradient(135deg,#2ab4e8,#2ae8c3); }
+  .av3 { background: linear-gradient(135deg,#e8a82a,#e8622a); }
+  .av4 { background: linear-gradient(135deg,#2ae870,#2ab4e8); }
+
+  @media (max-width: 768px) {
+    .layout { grid-template-columns: 1fr; }
+    .sidebar { position: static; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="brand">Nexus<span>.</span></div>
+  <div class="nav-right">
+    <div class="nav-user">
+      <div class="nav-avatar" id="navInitial">?</div>
+      <span id="navName">Carregando...</span>
+    </div>
+    <button class="btn-logout" onclick="logout()">Sair</button>
+  </div>
+</nav>
+
+<div class="layout">
+
+  <!-- FEED -->
+  <main>
+    <!-- COMPOSE -->
+    <div class="compose" id="composeBox" style="display:none">
+      <div class="compose-title">Nova publicação</div>
+      <input type="text" id="postTitle" placeholder="Título do post">
+      <textarea id="postContent" placeholder="O que você quer compartilhar?"></textarea>
+      <button class="btn-post" onclick="criarPost()">Publicar</button>
+      <div style="clear:both"></div>
+    </div>
+
+    <div class="feed-header">
+      <h2>Feed</h2>
+      <span class="post-count" id="postCount"></span>
+    </div>
+
+    <div id="feed"></div>
+  </main>
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-card">
+      <h3>Perfil</h3>
+      <div class="profile-info">
+        <div class="profile-avatar" id="profileInitial">?</div>
+        <div>
+          <div class="profile-name" id="profileName">—</div>
+          <div class="profile-email" id="profileEmail">—</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sidebar-card" id="adminLink" style="display:none">
+      <h3>Administração</h3>
+      <a href="admin.html" style="color:var(--accent);font-size:14px;text-decoration:none;font-weight:500;">
+        Ir para o painel admin →
+      </a>
+    </div>
+  </aside>
+
+</div>
+
+<!-- MODAL EDITAR -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <h3>Editar post</h3>
+    <input type="hidden" id="editId">
+    <input type="text" id="editTitle" placeholder="Título">
+    <textarea id="editContent" placeholder="Conteúdo"></textarea>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="fecharModal()">Cancelar</button>
+      <button class="btn-save" onclick="salvarEdicao()">Salvar</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  const AUTH  = '';          // auth-service: mesma origem (porta 3000)
+  const POSTS = 'http://localhost:3001'; // posts-service
+
+  const token = localStorage.getItem('token');
+  const myId  = Number(localStorage.getItem('id'));
+  const role  = localStorage.getItem('role');
+
+  if (!token) window.location.href = 'index.html';
+
+  // Preenche UI com dados do usuário
+  const name  = localStorage.getItem('name') || '?';
+  const email = localStorage.getItem('email') || '';
+  const ini   = name[0].toUpperCase();
+
+  document.getElementById('navInitial').textContent    = ini;
+  document.getElementById('navName').textContent       = name;
+  document.getElementById('profileInitial').textContent = ini;
+  document.getElementById('profileName').textContent   = name;
+  document.getElementById('profileEmail').textContent  = email;
+
+  if (role === 'admin') document.getElementById('adminLink').style.display = 'block';
+  document.getElementById('composeBox').style.display = 'block';
+
+  function avatarClass(email) {
+    let h = 0;
+    for (const c of email) h = (h * 31 + c.charCodeAt(0)) & 0xff;
+    return 'av' + (h % 5);
+  }
+
+  function timeAgo(dateStr) {
+    const diff = Date.now() - new Date(dateStr).getTime();
+    const m = Math.floor(diff / 60000);
+    if (m < 1)  return 'agora';
+    if (m < 60) return `${m}min`;
+    const h = Math.floor(m / 60);
+    if (h < 24) return `${h}h`;
+    return `${Math.floor(h / 24)}d`;
+  }
+
+  async function carregarFeed() {
+    try {
+      const res   = await fetch(`${POSTS}/posts`);
+      const posts = await res.json();
+
+      document.getElementById('postCount').textContent =
+        posts.length ? `${posts.length} publicações` : '';
+
+      const feed = document.getElementById('feed');
+      if (!posts.length) {
+        feed.innerHTML = `<div class="empty-state">
+          <h3>Nenhum post ainda</h3>
+          <p>Seja o primeiro a publicar algo!</p>
+        </div>`;
+        return;
+      }
+
+      feed.innerHTML = posts.map((p, i) => {
+        const isOwner = Number(p.user_id) === myId;
+        const avCls   = avatarClass(p.user_email);
+        const initials = p.user_email[0].toUpperCase();
+
+        return `<div class="post-card" style="animation-delay:${i * 0.05}s" id="post-${p.id}">
+          <div class="post-meta">
+            <div class="post-avatar ${avCls}">${initials}</div>
+            <div>
+              <div class="post-author">${p.user_email.split('@')[0]}</div>
+              <div class="post-email">${p.user_email}</div>
+            </div>
+            <div class="post-time">${timeAgo(p.created_at)}</div>
+          </div>
+          <div class="post-title">${escHtml(p.title)}</div>
+          <div class="post-content">${escHtml(p.content)}</div>
+          ${isOwner ? `
+          <div class="post-actions">
+            <button class="btn-action" onclick="abrirModal(${p.id},'${escHtml(p.title)}','${escHtml(p.content)}')">Editar</button>
+            <button class="btn-action btn-delete" onclick="deletarPost(${p.id})">Excluir</button>
+          </div>` : ''}
+        </div>`;
+      }).join('');
+    } catch (e) {
+      document.getElementById('feed').innerHTML =
+        `<div class="empty-state"><h3>Erro ao carregar</h3><p>Posts service indisponível.</p></div>`;
+    }
+  }
+
+  function escHtml(s) {
+    return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+  }
+
+  async function criarPost() {
+    const title   = document.getElementById('postTitle').value.trim();
+    const content = document.getElementById('postContent').value.trim();
+    if (!title || !content) return;
+
+    const res = await fetch(`${POSTS}/posts`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+      body: JSON.stringify({ title, content })
+    });
+
+    if (res.ok) {
+      document.getElementById('postTitle').value   = '';
+      document.getElementById('postContent').value = '';
+      carregarFeed();
+    }
+  }
+
+  async function deletarPost(id) {
+    if (!confirm('Excluir este post?')) return;
+    await fetch(`${POSTS}/posts/${id}`, {
+      method: 'DELETE',
+      headers: { 'Authorization': 'Bearer ' + token }
+    });
+    carregarFeed();
+  }
+
+  function abrirModal(id, title, content) {
+    document.getElementById('editId').value      = id;
+    document.getElementById('editTitle').value   = title;
+    document.getElementById('editContent').value = content;
+    document.getElementById('modalOverlay').classList.add('open');
+  }
+
+  function fecharModal() {
+    document.getElementById('modalOverlay').classList.remove('open');
+  }
+
+  async function salvarEdicao() {
+    const id      = document.getElementById('editId').value;
+    const title   = document.getElementById('editTitle').value.trim();
+    const content = document.getElementById('editContent').value.trim();
+    if (!title || !content) return;
+
+    await fetch(`${POSTS}/posts/${id}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+      body: JSON.stringify({ title, content })
+    });
+    fecharModal();
+    carregarFeed();
+  }
+
+  function logout() {
+    localStorage.clear();
+    window.location.href = 'index.html';
+  }
+
+  carregarFeed();
+</script>
+</body>
+</html>

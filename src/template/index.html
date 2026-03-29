@@ -2,194 +2,422 @@
 <html lang="pt-br">
 <head>
 <meta charset="UTF-8">
-<title>Login / Criar Conta</title>
-
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nexus — Entrar</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: Arial, sans-serif;
-}
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
-body {
-    background: linear-gradient(135deg, #004D61, #007a9c);
-    height: 100vh;
+  :root {
+    --bg:       #0d0d0f;
+    --surface:  #141416;
+    --border:   #222226;
+    --accent:   #e8622a;
+    --accent2:  #f0944d;
+    --text:     #f0ede8;
+    --muted:    #6b6b72;
+    --radius:   14px;
+  }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  /* LADO ESQUERDO — VISUAL */
+  .left {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 48px;
+    overflow: hidden;
+    background: #0a0a0c;
+    border-right: 1px solid var(--border);
+  }
+
+  .left::before {
+    content: '';
+    position: absolute;
+    top: -120px; left: -120px;
+    width: 500px; height: 500px;
+    background: radial-gradient(circle, rgba(232,98,42,0.18) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .left::after {
+    content: '';
+    position: absolute;
+    bottom: -80px; right: -80px;
+    width: 360px; height: 360px;
+    background: radial-gradient(circle, rgba(240,148,77,0.1) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .brand {
+    font-family: 'Syne', sans-serif;
+    font-size: 28px;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    color: var(--text);
+  }
+
+  .brand span { color: var(--accent); }
+
+  .left-content {
+    position: relative;
+    z-index: 1;
+  }
+
+  .left-content h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(36px, 4vw, 52px);
+    font-weight: 800;
+    line-height: 1.05;
+    letter-spacing: -1.5px;
+    margin-bottom: 20px;
+  }
+
+  .left-content h1 em {
+    font-style: normal;
+    color: var(--accent);
+  }
+
+  .left-content p {
+    color: var(--muted);
+    font-size: 16px;
+    line-height: 1.7;
+    max-width: 340px;
+  }
+
+  .mockup-posts {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 48px;
+    opacity: 0.55;
+  }
+
+  .mock-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 16px 20px;
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+  }
+
+  .mock-avatar {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .mock-avatar.a1 { background: linear-gradient(135deg, #e8622a, #f0944d); }
+  .mock-avatar.a2 { background: linear-gradient(135deg, #5b6af0, #9b5bdb); }
+  .mock-avatar.a3 { background: linear-gradient(135deg, #2ab4e8, #2ae8c3); }
+
+  .mock-lines { flex: 1; }
+  .mock-line  { height: 9px; background: var(--border); border-radius: 4px; margin-bottom: 8px; }
+  .mock-line.short { width: 60%; }
+  .mock-line.xshort { width: 35%; height: 7px; background: #1c1c20; }
+
+  .left-footer { color: var(--muted); font-size: 13px; }
+
+  /* LADO DIREITO — FORM */
+  .right {
     display: flex;
     align-items: center;
     justify-content: center;
-}
+    padding: 48px 64px;
+  }
 
-.container {
-    background: white;
-    width: 350px;
+  .form-box { width: 100%; max-width: 380px; }
+
+  .form-tabs {
+    display: flex;
+    gap: 0;
+    background: var(--surface);
+    border: 1px solid var(--border);
     border-radius: 10px;
-    padding: 25px;
-    box-shadow: 0 0 20px rgba(0,0,0,0.2);
-}
+    padding: 4px;
+    margin-bottom: 36px;
+  }
 
-h2 {
-    text-align: center;
-    margin-bottom: 20px;
-    color: #004D61;
-}
-
-input {
-    width: 100%;
+  .tab-btn {
+    flex: 1;
     padding: 10px;
-    margin-top: 10px;
-    border-radius: 6px;
-    border: 1px solid #ccc;
-}
-
-button {
-    width: 100%;
-    padding: 10px;
-    margin-top: 15px;
     border: none;
-    border-radius: 6px;
-    background: #004D61;
-    color: white;
-    font-size: 16px;
-    cursor: pointer;
-}
-
-button:hover {
-    background: #006b85;
-}
-
-.switch {
-    text-align: center;
-    margin-top: 15px;
+    background: transparent;
+    color: var(--muted);
+    font-family: 'DM Sans', sans-serif;
     font-size: 14px;
-}
-
-.switch a {
-    color: #004D61;
+    font-weight: 500;
+    border-radius: 8px;
     cursor: pointer;
-    text-decoration: none;
-    font-weight: bold;
-}
+    transition: all 0.2s;
+  }
 
-.form {
-    display: none;
-}
+  .tab-btn.active {
+    background: var(--accent);
+    color: #fff;
+  }
 
-.form.active {
+  .form-section { display: none; }
+  .form-section.active { display: block; }
+
+  .form-section h2 {
+    font-family: 'Syne', sans-serif;
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 6px;
+    letter-spacing: -0.5px;
+  }
+
+  .form-section p {
+    color: var(--muted);
+    font-size: 14px;
+    margin-bottom: 28px;
+  }
+
+  .field {
+    margin-bottom: 16px;
+  }
+
+  .field label {
     display: block;
-}
+    font-size: 12px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: var(--muted);
+    margin-bottom: 8px;
+  }
+
+  .field input {
+    width: 100%;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 13px 16px;
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  .field input:focus { border-color: var(--accent); }
+  .field input::placeholder { color: var(--muted); }
+
+  .btn-primary {
+    width: 100%;
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    padding: 14px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+    margin-top: 8px;
+    transition: background 0.2s, transform 0.1s;
+  }
+
+  .btn-primary:hover { background: var(--accent2); }
+  .btn-primary:active { transform: scale(0.98); }
+
+  .error-msg {
+    color: #e85555;
+    font-size: 13px;
+    margin-top: 12px;
+    display: none;
+    padding: 10px 14px;
+    background: rgba(232,85,85,0.1);
+    border-radius: 8px;
+    border: 1px solid rgba(232,85,85,0.2);
+  }
+
+  @media (max-width: 768px) {
+    body { grid-template-columns: 1fr; }
+    .left { display: none; }
+    .right { padding: 32px 24px; }
+  }
 </style>
 </head>
-
 <body>
 
-<div class="container">
+<!-- LADO ESQUERDO -->
+<div class="left">
+  <div class="brand">Nexus<span>.</span></div>
+
+  <div class="left-content">
+    <h1>Compartilhe<br>suas <em>ideias</em><br>com o mundo.</h1>
+    <p>Uma rede social simples, rápida e segura. Escreva, publique e conecte-se.</p>
+
+    <div class="mockup-posts">
+      <div class="mock-card">
+        <div class="mock-avatar a1"></div>
+        <div class="mock-lines">
+          <div class="mock-line" style="width:45%"></div>
+          <div class="mock-line"></div>
+          <div class="mock-line short"></div>
+          <div class="mock-line xshort"></div>
+        </div>
+      </div>
+      <div class="mock-card">
+        <div class="mock-avatar a2"></div>
+        <div class="mock-lines">
+          <div class="mock-line" style="width:55%"></div>
+          <div class="mock-line short"></div>
+          <div class="mock-line xshort"></div>
+        </div>
+      </div>
+      <div class="mock-card">
+        <div class="mock-avatar a3"></div>
+        <div class="mock-lines">
+          <div class="mock-line" style="width:40%"></div>
+          <div class="mock-line"></div>
+          <div class="mock-line xshort"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="left-footer">© 2025 Nexus — Gabriel Nakashima</div>
+</div>
+
+<!-- LADO DIREITO -->
+<div class="right">
+  <div class="form-box">
+
+    <div class="form-tabs">
+      <button class="tab-btn active" onclick="switchTab('login')">Entrar</button>
+      <button class="tab-btn" onclick="switchTab('register')">Criar conta</button>
+    </div>
 
     <!-- LOGIN -->
-    <div class="form active" id="loginForm">
-        <h2>Login</h2>
+    <div class="form-section active" id="tab-login">
+      <h2>Bem-vindo de volta</h2>
+      <p>Entre com sua conta para continuar.</p>
 
-        <input type="email" id="loginEmail" placeholder="Email">
-        <input type="password" id="loginPassword" placeholder="Senha">
-
-        <button onclick="login()">Entrar</button>
-
-        <div class="switch">
-            Não tem conta? <a onclick="trocar()">Criar conta</a>
-        </div>
+      <div class="field">
+        <label>Email</label>
+        <input type="email" id="loginEmail" placeholder="seu@email.com">
+      </div>
+      <div class="field">
+        <label>Senha</label>
+        <input type="password" id="loginPassword" placeholder="••••••••">
+      </div>
+      <button class="btn-primary" onclick="login()">Entrar</button>
+      <div class="error-msg" id="loginError"></div>
     </div>
 
     <!-- CADASTRO -->
-    <div class="form" id="registerForm">
-        <h2>Criar Conta</h2>
+    <div class="form-section" id="tab-register">
+      <h2>Criar conta</h2>
+      <p>Preencha os dados para começar.</p>
 
-        <input type="text" id="regName" placeholder="Nome">
-        <input type="email" id="regEmail" placeholder="Email">
-        <input type="password" id="regPassword" placeholder="Senha">
-
-        <button onclick="register()">Cadastrar</button>
-
-        <div class="switch">
-            Já tem conta? <a onclick="trocar()">Entrar</a>
-        </div>
+      <div class="field">
+        <label>Nome</label>
+        <input type="text" id="regName" placeholder="Seu nome">
+      </div>
+      <div class="field">
+        <label>Email</label>
+        <input type="email" id="regEmail" placeholder="seu@email.com">
+      </div>
+      <div class="field">
+        <label>Senha</label>
+        <input type="password" id="regPassword" placeholder="Mínimo 6 caracteres">
+      </div>
+      <button class="btn-primary" onclick="register()">Criar conta</button>
+      <div class="error-msg" id="registerError"></div>
     </div>
 
+  </div>
 </div>
 
 <script>
+  function switchTab(tab) {
+    document.querySelectorAll('.tab-btn').forEach((b, i) => {
+      b.classList.toggle('active', (i === 0 && tab === 'login') || (i === 1 && tab === 'register'));
+    });
+    document.getElementById('tab-login').classList.toggle('active', tab === 'login');
+    document.getElementById('tab-register').classList.toggle('active', tab === 'register');
+  }
 
-function trocar() {
-    document.getElementById("loginForm").classList.toggle("active");
-    document.getElementById("registerForm").classList.toggle("active");
-}
+  function showError(id, msg) {
+    const el = document.getElementById(id);
+    el.textContent = msg;
+    el.style.display = 'block';
+  }
 
-function login() {
-    const email = document.getElementById("loginEmail").value;
-    const password = document.getElementById("loginPassword").value;
+  async function login() {
+    const email    = document.getElementById('loginEmail').value;
+    const password = document.getElementById('loginPassword').value;
+    document.getElementById('loginError').style.display = 'none';
 
-    if(!email.includes("@")) {
-        alert("Email inválido!");
-        return;
-    }
-
-    fetch("/login", {
-        method: "POST",
-        headers: {"Content-Type": "application/json"},
+    try {
+      const res  = await fetch('/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password })
-    })
-    .then(res => { 
-        return res.json().then(data => {
-            return { status: res.status, body: data };
-        });
-    })
-    .then(result => {
-    if(result.status === 200 || result.status === 201) {
+      });
+      const data = await res.json();
 
-        localStorage.setItem("name", result.body.name);
-        localStorage.setItem("email", result.body.email);
-        localStorage.setItem("token", result.body.token);
-        localStorage.setItem("role", result.body.role);
-
-        if(result.body.role == "admin") {
-            window.location.href = ("admin.html");
-        } else {
-            window.location.href = "dashboard.html";
-        }
-    } else {
-        alert(result.body.message);
+      if (res.ok) {
+        localStorage.setItem('token', data.token);
+        localStorage.setItem('name',  data.name);
+        localStorage.setItem('email', data.email);
+        localStorage.setItem('role',  data.role);
+        localStorage.setItem('id',    data.id);
+        window.location.href = data.role === 'admin' ? 'admin.html' : 'feed.html';
+      } else {
+        showError('loginError', data.message || 'Erro ao fazer login');
+      }
+    } catch (e) {
+      showError('loginError', 'Erro de conexão. Tente novamente.');
     }
-    })
-    .catch(err => console.log(err));
-}
+  }
 
-function register() {
-    const name = document.getElementById("regName").value;
-    const email = document.getElementById("regEmail").value;
-    const password = document.getElementById("regPassword").value;
+  async function register() {
+    const name     = document.getElementById('regName').value;
+    const email    = document.getElementById('regEmail').value;
+    const password = document.getElementById('regPassword').value;
+    document.getElementById('registerError').style.display = 'none';
 
-    if(!email.includes("@")) {
-        alert("Email inválido!");
-        return;
-    }
+    if (password.length < 6) return showError('registerError', 'Senha muito curta (mínimo 6 caracteres)');
 
-    if(password.length < 6) {
-        alert("Senha muito curta!");
-        return;
-    }
-
-    fetch("/register", {
-        method: "POST",
-        headers: {"Content-type": "application/json"},
+    try {
+      const res  = await fetch('/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name, email, password })
-    })
-    .then(res => res.json())
-    .then(data => {
-        alert(data.message);
-    })
-    .catch(err => console.log(err));
-}
+      });
+      const data = await res.json();
 
+      if (res.ok) {
+        switchTab('login');
+        document.getElementById('loginEmail').value = email;
+      } else {
+        showError('registerError', data.message || 'Erro ao criar conta');
+      }
+    } catch (e) {
+      showError('registerError', 'Erro de conexão. Tente novamente.');
+    }
+  }
+
+  // redireciona se já logado
+  if (localStorage.getItem('token')) {
+    window.location.href = localStorage.getItem('role') === 'admin' ? 'admin.html' : 'feed.html';
+  }
 </script>
-
 </body>
 </html>
