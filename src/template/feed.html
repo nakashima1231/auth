@@ -464,7 +464,8 @@
           <div class="post-meta">
             <div class="post-avatar ${avCls}">${initials}</div>
             <div>
-              <div class="post-author">${p.username ? '@' + p.username : p.user_email.split('@')[0]}</div>
+              <div class="post-author">${p.name || p.user_email.split('@')[0]}</div>
+              <div class="post-email">${p.username ? '@' + p.username : p.user_email}</div>
             </div>
             <div class="post-time">${timeAgo(p.created_at)}</div>
           </div>
